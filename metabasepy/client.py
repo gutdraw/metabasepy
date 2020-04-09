@@ -36,10 +36,10 @@ class Resource(object):
             if status_code != 200:
                 raise RequestException(message=response.content)
         elif request_method == "POST":
-            if status_code not in [200, 201]:
+            if status_code not in [200, 201,202]:
                 raise RequestException(message=response.content)
         elif request_method == "PUT":
-            if status_code != 204:
+            if status_code not in [204,202]:
                 raise RequestException(message=response.content)
         elif request_method == "DELETE":
             if status_code != 204:
@@ -167,6 +167,7 @@ class CardResource(Resource):
         resp = requests.put(url=url, json=kwargs,
                             headers=self.prepare_headers())
         Resource.validate_response(response=resp)
+        return resp.json()
 
     def delete(self, card_id):
         url = "{}/{}".format(self.endpoint, card_id)
